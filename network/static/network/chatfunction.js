@@ -81,6 +81,42 @@ chatboxForm.addEventListener('submit', function (e) {
 	}
 })
 
+// FIX CỨNG
+
+
+function nhanNegative() {
+	//turn on chat box message
+	
+	const today = new Date()
+	let message = `
+	<div class="chatbox-message-item received">
+		<span class="chatbox-message-item-text">
+			Bị Negative, tin nhắn sửa ở đây
+		</span>
+		<span class="chatbox-message-item-time">${addZero(today.getHours())}:${addZero(today.getMinutes())}</span>
+	</div>
+`
+	chatboxMessageWrapper.insertAdjacentHTML('beforeend', message)
+	scrollBottom()
+}
+
+function nhanPositive() {
+	//turn on chat box message
+	
+	const today = new Date()
+	let message = `
+	<div class="chatbox-message-item received">
+		<span class="chatbox-message-item-text">
+			Bị Positive, tin nhắn sửa ở đây
+		</span>
+		<span class="chatbox-message-item-time">${addZero(today.getHours())}:${addZero(today.getMinutes())}</span>
+	</div>
+`
+	chatboxMessageWrapper.insertAdjacentHTML('beforeend', message)
+	scrollBottom()
+}
+
+
 
 
 function addZero(num) {
