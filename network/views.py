@@ -262,6 +262,7 @@ def create_post(request):
         text = request.POST.get('text')
         pic = request.FILES.get('picture')
         try:
+            
             post = Post.objects.create(
                 creater=request.user, content_text=text, content_image=pic)
             return HttpResponseRedirect(reverse('index'))

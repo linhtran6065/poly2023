@@ -48,7 +48,7 @@ def personality_detect(request):
 
         prediction = []
         for personality, percentage in personalities_output:
-            formatted_trait = f"{personality} with {int(percentage*100)}%"
+            formatted_trait = f"{personality} with {int(percentage*100)}% "
             prediction.append(formatted_trait)
 
         return render(request, "AI_models/result.html", {'prediction': prediction})
