@@ -2,13 +2,18 @@ document.addEventListener('DOMContentLoaded', () => {
     let active = document.querySelector('.body').dataset.page;
     document.querySelector("#" + active).classList.add('active');
 });
-function openForm() {
-    document.getElementById("myForm").style.display = "block";
-}
 
-function closeForm() {
-    document.getElementById("myForm").style.display = "none";
-}
+
+
+
+
+
+
+
+
+
+
+
 function drop_down(event) {
     let drop_down = event.target.parentElement.querySelector(".dropdown-menu");
     setTimeout(() => {
