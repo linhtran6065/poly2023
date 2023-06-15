@@ -12,8 +12,8 @@
 
 .btn {
     color: white;
-    background-color: #28a745 !important;
-    border-color: #28a745 !important;
+    background-color: #fe7941 !important;
+    border-color: #fe7941 !important;
     border-radius: 999px;
     width: 95%;
 }
@@ -21,8 +21,8 @@
 .btn:hover,
 .btn:active,
 .btn:focus {
-    background-color: #218838 !important;
-    border-color: #218838 !important;
+    background-color: #ea5d20 !important;
+    border-color: #ea5d20 !important;
 }
 
 .star {

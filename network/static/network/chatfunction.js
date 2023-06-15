@@ -86,12 +86,12 @@ chatboxForm.addEventListener('submit', function (e) {
 
 function nhanNegative() {
 	//turn on chat box message
-	
+
 	const today = new Date()
 	let message = `
 	<div class="chatbox-message-item received">
 		<span class="chatbox-message-item-text">
-			Bị Negative, tin nhắn sửa ở đây
+			Do you need any help from us?
 		</span>
 		<span class="chatbox-message-item-time">${addZero(today.getHours())}:${addZero(today.getMinutes())}</span>
 	</div>
@@ -102,12 +102,12 @@ function nhanNegative() {
 
 function nhanPositive() {
 	//turn on chat box message
-	
+
 	const today = new Date()
 	let message = `
 	<div class="chatbox-message-item received">
 		<span class="chatbox-message-item-text">
-			Bị Positive, tin nhắn sửa ở đây
+			We want to say thank you for your effort to spread positivity energy to the community:3
 		</span>
 		<span class="chatbox-message-item-time">${addZero(today.getHours())}:${addZero(today.getMinutes())}</span>
 	</div>

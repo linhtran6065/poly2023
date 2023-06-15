@@ -93,7 +93,8 @@
 .icon-btn {
     background: none;
     border-color: transparent;
-    color: #28a745;
+    /* color: #28a745; */
+    color: #fe7941;
     line-height: .82em;
     padding: 4px;
     margin: 0px;
@@ -164,7 +165,8 @@ svg {
 }
 
 .sidenav .nav-link>div:hover {
-    color: #17bf63;
+    /* color: #17bf63; */
+    color: #ff9947;
     background-color: #e7f8ef;
     transition-duration: .2s;
 }
@@ -193,7 +195,8 @@ svg {
 }
 
 .active a {
-    color: #28a745 !important;
+    /*  */
+    color: #fe7941 !important;
 }
 
 
@@ -524,7 +527,8 @@ svg {
 }
 
 .post-actions .save:hover {
-    color: #17bf63;
+    /* color: #17bf63; */
+    color: #fe7941;
     transition-duration: .2s;
 }
 
@@ -552,7 +556,8 @@ svg {
 }
 
 .post-actions .save:hover .svg-span {
-    color: #17bf63;
+    /* color: #17bf63; */
+    color: #fe7941;
     background-color: #def2eb;
     box-shadow: 0 0 0 3px #def2eb;
     transition-duration: .2s;
@@ -669,16 +674,20 @@ svg {
 
 .page-item.active .page-link {
     color: white !important;
-    background-color: #28a745;
-    border-color: #28a745;
+    /* background-color: #28a745; */
+    background-color: #fe7941;
+    /* border-color: #28a745; */
+    border-color: #fe7941;
 }
 
 .page-link {
-    color: #28a745;
+    /* color: #28a745; */
+    color: #fe7941;
 }
 
 .page-link:hover {
-    color: #218838;
+    color: #ea5d20
+        /* color: #218838; */
 }
 
 .page-link:focus {
@@ -925,7 +934,8 @@ svg {
 }
 
 .large-popup textarea:focus hr {
-    color: #28a745;
+    /* color: #28a745; */
+    color: #fe7941;
 }
 
 .large-popup .form-action-btns {
