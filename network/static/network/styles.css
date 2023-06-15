@@ -4,7 +4,6 @@
     font-family: system-ui, sans-serif;
 }
 
-/* Button used to open the chat form - fixed at the bottom of the page */
 .open-button {
     background-color: #555;
     color: white;
@@ -19,7 +18,7 @@
 }
 
 /* The popup chat - hidden by default */
-.form-popup {
+.chat-popup {
     display: none;
     position: fixed;
     bottom: 0;
@@ -52,7 +51,7 @@
     outline: none;
 }
 
-/* Set a style for the submit/login button */
+/* Set a style for the submit/send button */
 .form-container .btn {
     background-color: #04AA6D;
     color: white;
