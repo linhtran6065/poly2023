@@ -9,15 +9,15 @@ cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 
-
 messages = []
 system_msg = "You are a psychologist. Your task is to chat with users. Maximum 5 answers. If the conversation get too long, tell them you can help they reach to master users or professionals"
 messages.append({"role": "system", "content": system_msg})
 
-@app.route('/getchat/<msg>', methods=['GET', 'POST']) 
+
+@app.route('/getchat/<msg>', methods=['GET', 'POST'])
 def getchat(msg):
     message = msg
-    messages.append({"role": "user", "content": message}) # input cua user
+    messages.append({"role": "user", "content": message})  # input cua user
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=messages)

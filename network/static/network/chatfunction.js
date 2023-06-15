@@ -18,6 +18,7 @@ textarea.addEventListener('input', function () {
 
 
 
+
 // TOGGLE CHATBOX
 const chatboxToggle = document.querySelector('.chatbox-toggle')
 const chatboxMessage = document.querySelector('.chatbox-message-wrapper')
@@ -51,6 +52,24 @@ document.addEventListener('click', function (e) {
 // CHATBOX MESSAGE
 const chatboxMessageWrapper = document.querySelector('.chatbox-message-content')
 const chatboxNoMessage = document.querySelector('.chatbox-message-no-message')
+
+chatboxForm.addEventListener("keydown", function (e) {
+	console.log("key down")
+	if (!e) { var e = window.event; }
+	//e.preventDefault(); // sometimes useful
+
+	// Enter is pressed
+	if (e.keyCode == 13) {
+		if (isValid(textarea.value)) {
+			console.log("message is " + textarea.value)
+			setTimeout(autoReply(textarea.value), 1000)
+			writeMessage()
+		}
+
+	}
+
+
+});
 
 chatboxForm.addEventListener('submit', function (e) {
 	e.preventDefault()
