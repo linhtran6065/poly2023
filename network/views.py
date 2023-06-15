@@ -21,8 +21,10 @@ def index(request):
     followings = []
     suggestions = []
     if request.user.is_authenticated:
-        followings = Follower.objects.filter(followers=request.user).values_list('user', flat=True)
-        suggestions = User.objects.exclude(pk__in=followings).exclude(username=request.user.username).order_by("?")[:6]
+        followings = Follower.objects.filter(
+            followers=request.user).values_list('user', flat=True)
+        suggestions = User.objects.exclude(pk__in=followings).exclude(
+            username=request.user.username).order_by("?")[:6]
     return render(request, "network/index.html", {
         "posts": posts,
         "suggestions": suggestions,
@@ -63,9 +65,11 @@ def register(request):
         fname = request.POST["firstname"]
         lname = request.POST["lastname"]
         profile = request.FILES.get("profile")
-        print(f"--------------------------Profile: {profile}----------------------------")
+        print(
+            f"--------------------------Profile: {profile}----------------------------")
         cover = request.FILES.get('cover')
-        print(f"--------------------------Cover: {cover}----------------------------")
+        print(
+            f"--------------------------Cover: {cover}----------------------------")
 
         # Ensure password matches confirmation
         password = request.POST["password"]
@@ -84,7 +88,7 @@ def register(request):
                 user.profile_pic = profile
             else:
                 user.profile_pic = "profile_pic/no_pic.png"
-            user.cover = cover           
+            user.cover = cover
             user.save()
             Follower.objects.create(user=user)
         except IntegrityError:
@@ -92,9 +96,10 @@ def register(request):
                 "message": "Username already taken."
             })
         login(request, user)
-        return HttpResponseRedirect(reverse("index"))
+        return HttpResponseRedirect(reverse("quizz"))
     else:
         return render(request, "network/register.html")
+
 
 def quizz(request):
     radioQuestions = [
@@ -150,7 +155,6 @@ def quizz(request):
         }
     ]
 
-
     if request.method == "GET":
 
         return render(request, "network/quizz.html", {
@@ -174,12 +178,14 @@ def profile(request, username):
     suggestions = []
     follower = False
     if request.user.is_authenticated:
-        followings = Follower.objects.filter(followers=request.user).values_list('user', flat=True)
-        suggestions = User.objects.exclude(pk__in=followings).exclude(username=request.user.username).order_by("?")[:6]
+        followings = Follower.objects.filter(
+            followers=request.user).values_list('user', flat=True)
+        suggestions = User.objects.exclude(pk__in=followings).exclude(
+            username=request.user.username).order_by("?")[:6]
 
         if request.user in Follower.objects.get(user=user).followers.all():
             follower = True
-    
+
     follower_count = Follower.objects.get(user=user).followers.all().count()
     following_count = Follower.objects.filter(followers=user).count()
     return render(request, 'network/profile.html', {
@@ -193,17 +199,22 @@ def profile(request, username):
         "following_count": following_count
     })
 
+
 def following(request):
     if request.user.is_authenticated:
-        following_user = Follower.objects.filter(followers=request.user).values('user')
-        all_posts = Post.objects.filter(creater__in=following_user).order_by('-date_created')
+        following_user = Follower.objects.filter(
+            followers=request.user).values('user')
+        all_posts = Post.objects.filter(
+            creater__in=following_user).order_by('-date_created')
         paginator = Paginator(all_posts, 10)
         page_number = request.GET.get('page')
         if page_number == None:
             page_number = 1
         posts = paginator.get_page(page_number)
-        followings = Follower.objects.filter(followers=request.user).values_list('user', flat=True)
-        suggestions = User.objects.exclude(pk__in=followings).exclude(username=request.user.username).order_by("?")[:6]
+        followings = Follower.objects.filter(
+            followers=request.user).values_list('user', flat=True)
+        suggestions = User.objects.exclude(pk__in=followings).exclude(
+            username=request.user.username).order_by("?")[:6]
         return render(request, "network/index.html", {
             "posts": posts,
             "suggestions": suggestions,
@@ -212,9 +223,11 @@ def following(request):
     else:
         return HttpResponseRedirect(reverse('login'))
 
+
 def saved(request):
     if request.user.is_authenticated:
-        all_posts = Post.objects.filter(savers=request.user).order_by('-date_created')
+        all_posts = Post.objects.filter(
+            savers=request.user).order_by('-date_created')
 
         paginator = Paginator(all_posts, 10)
         page_number = request.GET.get('page')
@@ -222,8 +235,10 @@ def saved(request):
             page_number = 1
         posts = paginator.get_page(page_number)
 
-        followings = Follower.objects.filter(followers=request.user).values_list('user', flat=True)
-        suggestions = User.objects.exclude(pk__in=followings).exclude(username=request.user.username).order_by("?")[:6]
+        followings = Follower.objects.filter(
+            followers=request.user).values_list('user', flat=True)
+        suggestions = User.objects.exclude(pk__in=followings).exclude(
+            username=request.user.username).order_by("?")[:6]
         return render(request, "network/index.html", {
             "posts": posts,
             "suggestions": suggestions,
@@ -231,7 +246,6 @@ def saved(request):
         })
     else:
         return HttpResponseRedirect(reverse('login'))
-        
 
 
 @login_required
@@ -240,12 +254,14 @@ def create_post(request):
         text = request.POST.get('text')
         pic = request.FILES.get('picture')
         try:
-            post = Post.objects.create(creater=request.user, content_text=text, content_image=pic)
+            post = Post.objects.create(
+                creater=request.user, content_text=text, content_image=pic)
             return HttpResponseRedirect(reverse('index'))
         except Exception as e:
             return HttpResponse(e)
     else:
         return HttpResponse("Method must be 'POST'")
+
 
 @login_required
 @csrf_exempt
@@ -261,16 +277,16 @@ def edit_post(request, post_id):
             if img_chg != 'false':
                 post.content_image = pic
             post.save()
-            
-            if(post.content_text):
+
+            if (post.content_text):
                 post_text = post.content_text
             else:
                 post_text = False
-            if(post.content_image):
+            if (post.content_image):
                 post_image = post.img_url()
             else:
                 post_image = False
-            
+
             return JsonResponse({
                 "success": True,
                 "text": post_text,
@@ -284,7 +300,8 @@ def edit_post(request, post_id):
                 "success": False
             })
     else:
-            return HttpResponse("Method must be 'POST'")
+        return HttpResponse("Method must be 'POST'")
+
 
 @csrf_exempt
 def like_post(request, id):
@@ -303,6 +320,7 @@ def like_post(request, id):
     else:
         return HttpResponseRedirect(reverse('login'))
 
+
 @csrf_exempt
 def unlike_post(request, id):
     if request.user.is_authenticated:
@@ -319,6 +337,7 @@ def unlike_post(request, id):
             return HttpResponse("Method must be 'PUT'")
     else:
         return HttpResponseRedirect(reverse('login'))
+
 
 @csrf_exempt
 def save_post(request, id):
@@ -337,6 +356,7 @@ def save_post(request, id):
     else:
         return HttpResponseRedirect(reverse('login'))
 
+
 @csrf_exempt
 def unsave_post(request, id):
     if request.user.is_authenticated:
@@ -354,13 +374,15 @@ def unsave_post(request, id):
     else:
         return HttpResponseRedirect(reverse('login'))
 
+
 @csrf_exempt
 def follow(request, username):
     if request.user.is_authenticated:
         if request.method == 'PUT':
             user = User.objects.get(username=username)
             print(f".....................User: {user}......................")
-            print(f".....................Follower: {request.user}......................")
+            print(
+                f".....................Follower: {request.user}......................")
             try:
                 (follower, create) = Follower.objects.get_or_create(user=user)
                 follower.followers.add(request.user)
@@ -373,13 +395,15 @@ def follow(request, username):
     else:
         return HttpResponseRedirect(reverse('login'))
 
+
 @csrf_exempt
 def unfollow(request, username):
     if request.user.is_authenticated:
         if request.method == 'PUT':
             user = User.objects.get(username=username)
             print(f".....................User: {user}......................")
-            print(f".....................Unfollower: {request.user}......................")
+            print(
+                f".....................Unfollower: {request.user}......................")
             try:
                 follower = Follower.objects.get(user=user)
                 follower.followers.remove(request.user)
@@ -401,20 +425,22 @@ def comment(request, post_id):
             comment = data.get('comment_text')
             post = Post.objects.get(id=post_id)
             try:
-                newcomment = Comment.objects.create(post=post,commenter=request.user,comment_content=comment)
+                newcomment = Comment.objects.create(
+                    post=post, commenter=request.user, comment_content=comment)
                 post.comment_count += 1
                 post.save()
                 print(newcomment.serialize())
                 return JsonResponse([newcomment.serialize()], safe=False, status=201)
             except Exception as e:
                 return HttpResponse(e)
-    
+
         post = Post.objects.get(id=post_id)
         comments = Comment.objects.filter(post=post)
         comments = comments.order_by('-comment_time').all()
         return JsonResponse([comment.serialize() for comment in comments], safe=False)
     else:
         return HttpResponseRedirect(reverse('login'))
+
 
 @csrf_exempt
 def delete_post(request, post_id):
