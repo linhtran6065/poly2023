@@ -243,8 +243,7 @@ select {
 	padding: .75rem 1.5rem;
 }
 .chatbox-message-form {
-	display: flex;
-	align-items: center;
+	
 	background: var(--grey);
 	border-radius: .5rem;
 	padding: .5rem 1.25rem;
@@ -260,12 +259,14 @@ select {
 	display: none;
 }
 .chatbox-message-submit {
+	float: right;
 	font-size: 1.25rem;
 	color: var(--orange);
 	background: transparent;
 	border: none;
 	outline: none;
 	cursor: pointer;
+	
 }
 .chatbox-message-no-message {
 	font-size: 1rem;
@@ -276,7 +277,15 @@ select {
 
 
 
-
+.chatbox-message-item-text {
+	font-size: 1rem;
+	font-weight: 500;
+	line-height: 1.5;
+	width: 90% !important;
+	
+	word-break:break-all;
+	
+}
 
 
 
