@@ -315,11 +315,12 @@ def create_post(request):
                     negative, positive = 0, 0
 
                     post = Post.objects.create(
-                        creater=request.user,
-                        content_text=text,
-                        content_image=pic,
-                        evaluation_positive=positive,
-                        evaluation_negative=negative)
+                                creater=request.user,
+                                content_text=text,
+                                content_image=pic,
+                                evaluation_positive=positive,
+                                evaluation_negative=negative
+                            )
                     
                 # Bot actions 
                 # .....
