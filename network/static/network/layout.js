@@ -26,6 +26,7 @@ function remove_drop_down(event) {
 }
 
 function createpost() {
+
     let popup = document.querySelector(".popup");
     popup.style.display = 'block';
     popup.querySelector('.large-popup').style.display = 'block'

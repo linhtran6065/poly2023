@@ -14,12 +14,10 @@ from .models import *
 
 
 def index(request):
-    all_posts = Post.objects.all().order_by('-date_created')
-    paginator = Paginator(all_posts, 10)
-    page_number = request.GET.get('page')
-    if page_number == None:
-        page_number = 1
-    posts = paginator.get_page(page_number)
+    #all_posts = Post.objects.all().order_by('-date_created')
+    #all post from that user
+    all_posts = Post.objects.filter(creater=request.user)
+
     followings = []
     suggestions = []
     if request.user.is_authenticated:
@@ -28,6 +26,16 @@ def index(request):
         suggestions = User.objects.exclude(pk__in=followings).exclude(
             username=request.user.username).order_by("?")[:6]
         communitys = Community.objects.filter(userlist=request.user)
+        #post from community user inside only
+        for community in communitys:
+            print(Post.objects.filter(community=community.community_id))
+            all_posts = all_posts.union(Post.objects.filter(community=community.community_id))
+    all_posts = all_posts.order_by('-date_created')
+    paginator = Paginator(all_posts, 10)
+    page_number = request.GET.get('page')
+    if page_number == None:
+        page_number = 1
+    posts = paginator.get_page(page_number)
     return render(request, "network/index.html", {
         "posts": posts,
         "suggestions": suggestions,
@@ -189,6 +197,7 @@ def profile(request, username):
 
         if request.user in Follower.objects.get(user=user).followers.all():
             follower = True
+        communitys = Community.objects.filter(userlist=request.user)
 
     follower_count = Follower.objects.get(user=user).followers.all().count()
     following_count = Follower.objects.filter(followers=user).count()
@@ -200,7 +209,9 @@ def profile(request, username):
         "page": "profile",
         "is_follower": follower,
         "follower_count": follower_count,
-        "following_count": following_count
+        "following_count": following_count,
+        "communitys": communitys,
+
     })
 
 
@@ -219,10 +230,12 @@ def following(request):
             followers=request.user).values_list('user', flat=True)
         suggestions = User.objects.exclude(pk__in=followings).exclude(
             username=request.user.username).order_by("?")[:6]
+        communitys = Community.objects.filter(userlist=request.user)
         return render(request, "network/index.html", {
             "posts": posts,
             "suggestions": suggestions,
-            "page": "following"
+            "page": "following",
+            "communitys": communitys,
         })
     else:
         return HttpResponseRedirect(reverse('login'))
@@ -243,10 +256,12 @@ def saved(request):
             followers=request.user).values_list('user', flat=True)
         suggestions = User.objects.exclude(pk__in=followings).exclude(
             username=request.user.username).order_by("?")[:6]
+        communitys = Community.objects.filter(userlist=request.user)
         return render(request, "network/index.html", {
             "posts": posts,
             "suggestions": suggestions,
-            "page": "saved"
+            "page": "saved",
+            "communitys": communitys,
         })
     else:
         return HttpResponseRedirect(reverse('login'))
@@ -255,11 +270,18 @@ def saved(request):
 @login_required
 def create_post(request):
     if request.method == 'POST':
+        prevurl = request.META.get('HTTP_REFERER')
+        communityid = -1 
+        if ("/community/" in prevurl):
+            communityid = prevurl.split('/community/')[1]
+        print(communityid)
         text = request.POST.get('text')
         pic = request.FILES.get('picture')
         try:
-            post = Post.objects.create(
-                creater=request.user, content_text=text, content_image=pic)
+            if (communityid != -1):
+                post = Post.objects.create(creater=request.user, content_text=text, content_image=pic, community=Community.objects.get(community_id=communityid))
+            else:
+                post = Post.objects.create(creater=request.user, content_text=text, content_image=pic)
             return HttpResponseRedirect(reverse('index'))
         except Exception as e:
             return HttpResponse(e)
