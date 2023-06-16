@@ -6,3 +6,9 @@ class PersonalityDetectionModel(models.Model):
 
     def __str__(self):
         return f"Output {self.personalities}"
+    
+class SentimentModel(models.Model):
+    value = models.CharField(max_length=255, default=0)
+
+    def __str__(self):
+        return f"Sentiment score {self.value}"

@@ -6,8 +6,10 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
-# import requests
+from django.test import Client
 import json
+import requests
+from django.middleware.csrf import get_token
 
 from .models import *
 
@@ -262,7 +264,6 @@ def create_post(request):
         text = request.POST.get('text')
         pic = request.FILES.get('picture')
         try:
-            
             post = Post.objects.create(
                 creater=request.user, content_text=text, content_image=pic)
             return HttpResponseRedirect(reverse('index'))
@@ -270,7 +271,6 @@ def create_post(request):
             return HttpResponse(e)
     else:
         return HttpResponse("Method must be 'POST'")
-
 
 @login_required
 @csrf_exempt
