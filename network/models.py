@@ -28,6 +28,8 @@ class Post(models.Model):
     likers = models.ManyToManyField(User,blank=True , related_name='likes')
     savers = models.ManyToManyField(User,blank=True , related_name='saved')
     comment_count = models.IntegerField(default=0)
+    evaluation_positive = models.IntegerField(default=0)
+    evaluation_negative = models.IntegerField(default=0)
 
     def __str__(self):
         return f"Post ID: {self.id} (creater: {self.creater})"

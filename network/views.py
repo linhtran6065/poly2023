@@ -258,17 +258,78 @@ def saved(request):
         return HttpResponseRedirect(reverse('login'))
 
 
+# @login_required
+# def create_post(request):
+#     if request.method == 'POST':
+#         text = request.POST.get('text')
+#         pic = request.FILES.get('picture')
+#         try:
+#             post = Post.objects.create(
+#                 creater=request.user, content_text=text, content_image=pic)
+#             return HttpResponseRedirect(reverse('index'))
+#         except Exception as e:
+#             return HttpResponse(e)
+#     else:
+#         return HttpResponse("Method must be 'POST'")
+
 @login_required
 def create_post(request):
     if request.method == 'POST':
         text = request.POST.get('text')
         pic = request.FILES.get('picture')
-        try:
-            post = Post.objects.create(
-                creater=request.user, content_text=text, content_image=pic)
-            return HttpResponseRedirect(reverse('index'))
-        except Exception as e:
-            return HttpResponse(e)
+
+        # Get user_name
+        user = request.user
+        user_name = user.username
+        
+        # Call sentiment analysis API
+        response = requests.post('http://127.0.0.1:8000/AI_models/sentiment_analysis/', data={'content_text': text})
+        
+        if response.status_code == 200:
+            result = response.json().get('result')
+            print(result)
+            
+            try:
+                # Get current evaluation_negative, evaluation_positive
+                user_post = Post.objects.filter(creater__username=user_name)
+
+                if len(user_post) != 0:
+                    latest_user_post = user_post[len(user_post)-1]
+                    negative, positive = latest_user_post.evaluation_negative, latest_user_post.evaluation_positive
+
+                    if result[0] > 0.90:
+                        print("xxxxxxxxxxx")
+                        negative += 1
+                    if result[2] > 0.90:
+                        print("xxxxxxxxxxx")
+                        positive += 1
+
+                    post = Post.objects.create(
+                                creater=request.user,
+                                content_text=text,
+                                content_image=pic,
+                                evaluation_positive=positive,
+                                evaluation_negative=negative
+                            )
+                else: 
+                    negative, positive = 0, 0
+
+                    post = Post.objects.create(
+                        creater=request.user,
+                        content_text=text,
+                        content_image=pic,
+                        evaluation_positive=positive,
+                        evaluation_negative=negative)
+                    
+                # Bot actions 
+                # .....
+
+            
+                return HttpResponseRedirect(reverse('index'))
+            except Exception as e:
+                return HttpResponse(e)
+        else:
+            return HttpResponse('Failed to get a valid response from the AI model.')
     else:
         return HttpResponse("Method must be 'POST'")
 

@@ -1,9 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse, QueryDict, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from network.questions import radioQuestions
 from .models import *
 
+
 import torch
+import numpy as np
 from transformers import XLNetForSequenceClassification, XLNetTokenizer,BertForSequenceClassification,BertTokenizer, RobertaForSequenceClassification,RobertaTokenizer
 from transformers import AutoModelForSequenceClassification
 from transformers import AutoTokenizer
@@ -61,17 +64,19 @@ def personality_detect(request):
     else:
         return HttpResponse("Response message")
 
+@csrf_exempt
 def sentiment_analysis(request):
     if request.method=="POST":
         text = request.POST.get("content_text","")
         
         # Get prediction
         score = AI_model_2(model2, tokenizer2, text)
+        score = score.tolist()
 
         # Save to database
         # score_obj = SentimentModel(value=score)
         # score_obj.save()
-        
+
         return JsonResponse({'result': score})
     else:
         # return render(request, "AI_models/result2.html")   
@@ -116,7 +121,7 @@ def AI_model_2(model, tokenizer, user_input):
     output = model(**encoded_input)
     scores = output[0][0].detach().numpy()
     scores = softmax(scores)
-    return scores[0]
+    return scores
 
 def preprocess(text):
     new_text = []
