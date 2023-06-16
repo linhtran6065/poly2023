@@ -7,6 +7,7 @@ class User(AbstractUser):
     profile_pic = models.ImageField(upload_to='profile_pic/')
     bio = models.TextField(max_length=160, blank=True, null=True)
     cover = models.ImageField(upload_to='covers/', blank=True)
+    community = models.ManyToManyField('Community', blank=True, related_name='users', null=True, default=None)
 
     def __str__(self):
         return self.username
@@ -28,6 +29,7 @@ class Post(models.Model):
     likers = models.ManyToManyField(User,blank=True , related_name='likes')
     savers = models.ManyToManyField(User,blank=True , related_name='saved')
     comment_count = models.IntegerField(default=0)
+    community = models.ForeignKey('Community', on_delete=models.CASCADE, related_name='posts', null=True, default=None)
 
     def __str__(self):
         return f"Post ID: {self.id} (creater: {self.creater})"
@@ -61,4 +63,29 @@ class Follower(models.Model):
 
     def __str__(self):
         return f"User: {self.user}"
-        
+
+
+#COMMUNITY PART
+
+class Community(models.Model):
+    community_id = models.AutoField(primary_key=True, default=None)
+    userlist = models.ManyToManyField(User, blank=True,related_name='userlist')
+    postlist = models.ManyToManyField(Post, blank=True,related_name='postlist')
+    name = models.CharField(max_length=64)
+    description = models.TextField(max_length=140, blank=True)
+    cover = models.ImageField(upload_to='covers/', blank=True)
+
+    def to_string(self):
+        return f"Community: {self.name} | Description: {self.description}"
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "cover": self.cover.url
+        }
+    def __str__(self):
+        return f"Community: {self.name} | Description: {self.description}"
+
+
+

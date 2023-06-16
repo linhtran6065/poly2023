@@ -1,0 +1,28 @@
+.communityitem {
+    display: flex;
+    align-items: center;
+    font-size: .82rem;
+    font-weight: normal;
+    text-align: center;
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+    padding-left: 3px !important;
+   
+}
+
+.communityitem .communityitem-name {
+    margin-left: 5px;
+    margin-right: 5px;
+    color: #000;
+    text-decoration: none;
+    text-align: center;
+}
+
+.communityitem .communityitem-profilepic {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+  
+    object-fit: cover;
+    object-position: center right;
+}

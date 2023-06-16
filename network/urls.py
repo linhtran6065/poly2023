@@ -13,6 +13,7 @@ urlpatterns = [
     path("n/register", views.register, name="register"),
     path("n/quizz", views.quizz, name="quizz"),
     path("<str:username>", views.profile, name='profile'),
+    
     path("n/following", views.following, name='following'),
     path("n/saved", views.saved, name="saved"),
     path("n/createpost", views.create_post, name="createpost"),
@@ -25,7 +26,12 @@ urlpatterns = [
     path("n/post/<int:post_id>/delete", views.delete_post, name="deletepost"),
     path("<str:username>/follow", views.follow, name="followuser"),
     path("<str:username>/unfollow", views.unfollow, name="unfollowuser"),
-    path("n/post/<int:post_id>/edit", views.edit_post, name="editpost")
+    path("n/post/<int:post_id>/edit", views.edit_post, name="editpost"),
+    path("n/choosegroup", views.choose_group, name="choosegroup"),
+    path("n/community/join/<int:id>", views.join_community, name='joincommunity'),
+    path("n/community/leave/<int:id>", views.leave_community, name='leavecommunity'),
+    path("community/<int:id>", views.community, name='community'),
+
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -3,17 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector("#" + active).classList.add('active');
 });
 
-
-
-
-
-
-
-
-
-
-
-
 function drop_down(event) {
     let drop_down = event.target.parentElement.querySelector(".dropdown-menu");
     setTimeout(() => {

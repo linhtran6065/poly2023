@@ -6,6 +6,8 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
+from django.shortcuts import redirect
+
 import json
 
 from .models import *
@@ -25,9 +27,11 @@ def index(request):
             followers=request.user).values_list('user', flat=True)
         suggestions = User.objects.exclude(pk__in=followings).exclude(
             username=request.user.username).order_by("?")[:6]
+        communitys = Community.objects.filter(userlist=request.user)
     return render(request, "network/index.html", {
         "posts": posts,
         "suggestions": suggestions,
+        "communitys": communitys,
         "page": "all_posts",
         'profile': False
     })
@@ -366,6 +370,97 @@ def unsave_post(request, id):
             try:
                 post.savers.remove(request.user)
                 post.save()
+                return HttpResponse(status=204)
+            except Exception as e:
+                return HttpResponse(e)
+        else:
+            return HttpResponse("Method must be 'PUT'")
+    else:
+        return HttpResponseRedirect(reverse('login'))
+
+@login_required
+@csrf_exempt
+def choose_group(request):
+    if request.user.is_authenticated:
+        communitys = Community.objects.all()
+    return render(request, 'network/choosegroup.html', {
+        "communitys": communitys,
+    })
+
+
+@login_required
+@csrf_exempt
+def join_community(request, id):
+    if request.user.is_authenticated:
+            community = Community.objects.get(community_id=id)
+            print(community)
+            try:
+                community.userlist.add(request.user)
+                community.save()
+                #return HttpResponseRedirect(request.path_info)
+                url = reverse('community', kwargs={'id': id})
+                return HttpResponseRedirect(url)
+            except Exception as e:
+                return HttpResponse(e)
+    else:
+        return HttpResponseRedirect(reverse('login'))
+
+@login_required
+@csrf_exempt
+def leave_community(request, id):
+    if request.user.is_authenticated:
+            community = Community.objects.get(community_id=id)
+            print(community)
+            try:
+                community.userlist.remove(request.user)
+                community.save()
+                #return HttpResponseRedirect(request.path_info)
+                url = reverse('community', kwargs={'id': id})
+                return HttpResponseRedirect(url)
+            except Exception as e:
+                return HttpResponse(e)
+    else:
+        return HttpResponseRedirect(reverse('login'))
+
+
+@login_required
+@csrf_exempt 
+def community(request, id):
+    if request.user.is_authenticated:
+        community = Community.objects.get(community_id=id)
+        communitys = Community.objects.filter(userlist=request.user)
+        posts = Post.objects.filter(community=community).order_by('-date_created')
+        paginator = Paginator(posts, 10)
+        page_number = request.GET.get('page')
+        if page_number == None:
+            page_number = 1
+        posts = paginator.get_page(page_number)
+        followings = Follower.objects.filter(
+            followers=request.user).values_list('user', flat=True)
+        suggestions = User.objects.exclude(pk__in=followings).exclude(
+            username=request.user.username).order_by("?")[:6]
+        return render(request, "network/groupview.html", {
+            "user": request.user,
+            "posts": posts,
+            "suggestions": suggestions,
+            "page": "group",
+            "community": community,
+            "communitys": communitys,
+        })
+    else:
+        return HttpResponseRedirect(reverse('login'))
+
+
+@login_required
+@csrf_exempt
+def joingroup(request, groupid):
+    if request.user.is_authenticated:
+        if request.method == 'PUT':
+            group = Community.objects.get(pk=groupid)
+            print(group)
+            try:
+                group.userlist.add(request.user)
+                group.save()
                 return HttpResponse(status=204)
             except Exception as e:
                 return HttpResponse(e)

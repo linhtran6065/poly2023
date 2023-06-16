@@ -1,0 +1,41 @@
+{% extends 'network/index.html' %}
+
+{% load static %}
+
+{% block profile %}
+<div class="profile-view" data-user="{{community.community_id}}">
+    <div class="cover-image" style="background-image: url({{community.cover}})"></div>
+    <div class="profile-image" style="background-image: url({{community.cover}})"></div>
+    <div class="profile-details">
+        <div>
+            {% if user in community.userlist.all %}
+            <a href="{% url 'leavecommunity' community.community_id %}">
+                <button class="btn btn-success float-right" id="following-btn">Leave Community</button>
+            </a>
+            {% else %}
+            <a href="{% url 'joincommunity' community.community_id %}">
+                <button class="btn btn-outline-success float-right" id="follow-btn">Join Community</button>
+            </a>
+
+            {% endif %}
+        </div>
+        <div class="details-data">
+            <h5>{{community.name}}</h5>
+            <div class="bio">
+                {% if community.description is not None %}
+                {{community.description}}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="space"></div>
+{% endblock %}
+
+{% block emptyprofile %}
+<center>
+    <br>
+    <strong style="font-size: 1.2em;">{{community.name}} have no post</strong>
+    <div class="grey" style="font-size: .9em;">Post something here</div>
+</center>
+{% endblock %}
