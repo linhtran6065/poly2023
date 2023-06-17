@@ -5,7 +5,7 @@ Result | Network
 {% endblock %}
 
 {% block body %}
-<div class="" style="margin-top: 6vh;">
+<div >
     <div>
         <center>
             <img src="{% static 'network/Images/logo_icon.png' %}" height="190em" style="margin-bottom: 2vh;">
@@ -16,7 +16,7 @@ Result | Network
     <div class="prediction-container" style="margin-top: 0vh;">
         <h2>Results of your personality assessment.</h2>
         {% for result in prediction %}
-        <div class="prediction-item" style="margin-top: 3vh;">
+        <div class="prediction-item" style="margin-top: 1vh;">
             <label>
                 <input type="checkbox" name="selected_prediction" value="{{ result }}" />
                 {{ result }}
