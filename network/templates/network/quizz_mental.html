@@ -15,7 +15,7 @@ Sign Up | Network
     <div>
         <center>
             <img src="{% static 'network/Images/logo_icon.png' %}" height="45em" style="margin-bottom: 2vh;">
-            <h3>What is your personality type?</h2><br>
+            <h3>Take a mental health test!</h2><br>
         </center>
     </div>
 
@@ -29,11 +29,11 @@ Sign Up | Network
         </div>
     </div>
 
-    <form action="{% url 'quizz' %}" method="post" id="quizz-form" style="width: 100%;margin-bottom: 5vh;"
+    <form action="{% url 'quizz_mental' %}" method="post" id="quizz-form" style="width: 100%;margin-bottom: 5vh;"
         enctype="multipart/form-data">
         {% csrf_token %}
         <div>
-            {% for item in radioQuestions %}
+            {% for item in mentalQuestions %}
             <div class="form-group"
                 style="display: flex; align-items: center; flex-direction: column; border: 2px solid #fe7941; padding: 1rem; border-radius: 8px">
                 <p style="font-size: 1.2rem; font-weight: bolder">{{ item.question }}:</p>

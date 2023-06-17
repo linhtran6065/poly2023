@@ -5,5 +5,6 @@ app_name = 'AI_models'
 
 urlpatterns = [
     path('personality_detect/', views.personality_detect, name="personality_detect"),
-    path('sentiment_analysis/', views.sentiment_analysis, name='sentiment_analysis')
+    path('sentiment_analysis/', views.sentiment_analysis, name='sentiment_analysis'),
+    path('mental_detect/', views.mental_detect, name='mental_detect')
 ]
