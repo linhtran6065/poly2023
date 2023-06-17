@@ -9,6 +9,8 @@ from django.core.paginator import Paginator
 from django.shortcuts import redirect
 
 import json
+import requests
+from django.middleware.csrf import get_token
 
 from .models import *
 
@@ -176,8 +178,9 @@ def quizz(request):
         })
 
     if request.method == "POST":
-        # print(request.POST)
-        return JsonResponse({"message": "POST request received.", "data": request.POST}, status=200)
+        user_answer = request.POST
+        request.session['user_answer'] = user_answer
+        return HttpResponseRedirect(reverse("AI_models:personality_detect"))
 
 
 def profile(request, username):
@@ -276,17 +279,64 @@ def create_post(request):
         communityid = -1 
         if ("/community/" in prevurl):
             communityid = prevurl.split('/community/')[1]
+
+        print("*"*20)
         print(communityid)
         text = request.POST.get('text')
         pic = request.FILES.get('picture')
-        try:
-            if (communityid != -1):
-                post = Post.objects.create(creater=request.user, content_text=text, content_image=pic, community=Community.objects.get(community_id=communityid))
-            else:
-                post = Post.objects.create(creater=request.user, content_text=text, content_image=pic)
-            return HttpResponseRedirect(reverse('index'))
-        except Exception as e:
-            return HttpResponse(e)
+
+        # Get user_name
+        user = request.user
+        user_name = user.username
+
+        # Call sentiment analysis API
+        response = requests.post('http://127.0.0.1:8000/AI_models/sentiment_analysis/', data={'content_text': text})
+        if response.status_code == 200:
+            result = response.json().get('result')
+            print(result)
+            try:
+                if (communityid != -1):
+                    print("aaaaaaaaaaaaaaaaaa")
+                    user_post = Post.objects.filter(creater__username=user_name)
+                    # print(user_post)
+                    # print(len(user_post))
+                    if len(user_post) != 0:
+                        latest_user_post = user_post[len(user_post)-1]
+                        negative, positive = latest_user_post.evaluation_negative, latest_user_post.evaluation_positive
+                        
+                        if result[0] > 0.90:
+                            print("xxxxxxxxxxx")
+                            negative += 1
+                        if result[2] > 0.90:
+                            print("xxxxxxxxxxx")
+                            positive += 1
+
+                        post = Post.objects.create(creater=request.user,
+                                    content_text=text,
+                                    content_image=pic,
+                                    community=Community.objects.get(community_id=communityid),
+                                    evaluation_positive=positive,
+                                    evaluation_negative=negative
+                                )
+                    else: 
+                        negative, positive = 0, 0
+
+                        post = Post.objects.create(
+                                    creater=request.user,
+                                    content_text=text,
+                                    content_image=pic,
+                                    evaluation_positive=positive,
+                                    evaluation_negative=negative
+                                )
+
+                else:
+                    post = Post.objects.create(creater=request.user, content_text=text, content_image=pic)                
+                return HttpResponseRedirect(reverse('index'))
+
+            except Exception as e:
+                return HttpResponse(e)
+        else: 
+            return HttpResponse('Failed to get a valid response from the AI model.')
     else:
         return HttpResponse("Method must be 'POST'")
 
