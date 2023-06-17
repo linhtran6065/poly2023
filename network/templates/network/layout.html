@@ -117,7 +117,7 @@
     <div class="body" data-page="{{page}}">
         <div class="sidenav">
             <a href="{% url 'index' %}" class="navbar-brand">
-                <img src="{% static 'network/Images/logo.png' %}" height="31px">
+                <img src="{% static 'network/Images/logo.png' %}" height="67px">
             </a>
             <div style="height: 100%;">
                 <div>
@@ -428,6 +428,17 @@
     </div>
 
     <script src="{% static 'network/chatfunction.js' %}"></script>
+    {% if redflag == 1 %}
+
+    <script>nhanPositive();</script>
+
+
+    {% endif %}
+    {% if redflag == -1 %}
+
+    <script>nhanNegative();</script>
+
+    {% endif %}
 
 </body>
 

@@ -42,8 +42,7 @@
                                         <a href="{% url 'profile' post.creater.username %}">
                                             <span class="grey">&nbsp;@{{post.creater.username}}</span>
                                         </a>
-                                        <span class="grey">&nbsp;&middot;&nbsp;&nbsp;{{post.date_created | date:"P M d
-                                            Y"}}</span>
+                                        <span class="grey">&nbsp;&middot;&nbsp;&nbsp;{{post.date_created}}</span>
                                     </div>
                                     <div class="dropdown" style="height: 1em; margin-top: -3px; margin-right: -3px;">
                                         <button class="icon-btn dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -243,6 +242,7 @@
     </div>
 
 </div>
+
 
 
 {% endblock %}
