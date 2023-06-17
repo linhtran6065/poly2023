@@ -30,6 +30,8 @@ class Post(models.Model):
     savers = models.ManyToManyField(User,blank=True , related_name='saved')
     comment_count = models.IntegerField(default=0)
     community = models.ForeignKey('Community', on_delete=models.CASCADE, related_name='posts', null=True, default=None)
+    evaluation_positive = models.IntegerField(default=0)
+    evaluation_negative = models.IntegerField(default=0)
 
     def __str__(self):
         return f"Post ID: {self.id} (creater: {self.creater})"

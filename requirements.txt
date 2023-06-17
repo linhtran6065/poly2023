@@ -6,3 +6,7 @@ sqlparse==0.4.2
 flask
 flask_cors
 openai
+transformers
+torch
+numpy
+scipy

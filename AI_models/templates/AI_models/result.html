@@ -1,0 +1,64 @@
+{% extends "network/layout2.html" %}
+{% load static %}
+{% block title %}
+Result | Network
+{% endblock %}
+
+{% block body %}
+<div class="" style="margin-top: 6vh;">
+    <div>
+        <center>
+            <img src="{% static 'network/Images/logo_icon.png' %}" height="45em" style="margin-bottom: 2vh;">
+            <h3>Echoes</h2><br>
+        </center>
+    </div>
+
+    <div class="prediction-container" style="margin-top: 0vh;">
+        <h2>Results of your personality assessment.</h2>
+        {% for result in prediction %}
+        <div class="prediction-item" style="margin-top: 3vh;">
+            <label>
+                <input type="checkbox" name="selected_prediction" value="{{ result }}" />
+                {{ result }}
+            </label>
+        </div>
+        {% endfor %}
+    </div>
+
+    <style>
+        .prediction-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-top: 3em;
+        }
+    
+        .prediction-item {
+            margin-bottom: 1em;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .prediction-heading {
+            margin-bottom: 5em;
+            font-size: 1.5em;
+        }
+        .prediction-item input[type="checkbox"] {
+            transform: scale(2);
+            margin-right: 0.5em;
+            --checkbox-color: #fe7941;
+        }
+        .prediction-item input[type="checkbox"]::before {
+            background-color: var(--checkbox-color);
+        }
+    </style>
+
+    <div class="button-container"style="text-align: center;">
+        <form method="get" action="{% url 'index' %}">
+            <button type="submit" class="btn btn-primary" style="margin-top: 10px; width: 120px;">Go to communities</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -19,4 +19,5 @@ from django.urls import include, path
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("network.urls")),
+    path('AI_models/', include('AI_models.urls', namespace='AI_models')),
 ]
