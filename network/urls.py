@@ -31,6 +31,7 @@ urlpatterns = [
     path("n/community/join/<int:id>", views.join_community, name='joincommunity'),
     path("n/community/leave/<int:id>", views.leave_community, name='leavecommunity'),
     path("community/<int:id>", views.community, name='community'),
+    path("chatapi/<str:msg>", views.chatapi, name='chatapi'),
 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

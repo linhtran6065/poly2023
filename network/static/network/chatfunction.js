@@ -86,7 +86,7 @@ chatboxForm.addEventListener('submit', function (e) {
 
 function nhanNegative() {
 	//turn on chat box message
-
+	chatboxMessage.classList.toggle('show')
 	const today = new Date()
 	let message = `
 	<div class="chatbox-message-item received">
@@ -102,7 +102,7 @@ function nhanNegative() {
 
 function nhanPositive() {
 	//turn on chat box message
-
+	chatboxMessage.classList.toggle('show')
 	const today = new Date()
 	let message = `
 	<div class="chatbox-message-item received">
@@ -146,37 +146,79 @@ function writeMessage() {
 
 
 function autoReply(msg) {
-	console.log("received " + msg)
+	console.log("ULATRRRRRR " + msg)
+	console.log("ULATRRRRRR " + msg)
+	console.log("ULATRRRRRR " + msg)
+
 	const today = new Date()
 
-	const cautraloicuabot = fetch("http://127.0.0.1:5000/getchat/" + msg,
+	const cautraloicuabot = fetch('/chatapi/' + msg,
 		{
 			method: 'POST',
-			mode: 'cors',
-			headers: {
-				'Content-Type': 'application/json'
-			},
 		}
 	)
 		.then((response) => response.json())
 		.then((cautraloicuabot) => {
-			console.log("bot reply response " + cautraloicuabot)
+			console.log("bot reply response " + cautraloicuabot["reply"])
 			return cautraloicuabot;
 		});
 
 	const getAPI = () => {
 		cautraloicuabot.then((a) => {
-			console.log("bot reply " + a)
+			console.log("bot reply " + a["reply"])
 			let message = `
 				<div class="chatbox-message-item received">
 					<span class="chatbox-message-item-text">
-					${a}
+					${a["reply"]}
 					</span>
 					<span class="chatbox-message-item-time">${addZero(today.getHours())}:${addZero(today.getMinutes())}</span>
 				</div>
 			`
 			chatboxMessageWrapper.insertAdjacentHTML('beforeend', message)
 			scrollBottom()
+			if (a["msg1"] != "") {
+				let message = `
+				<div class="chatbox-message-item received">
+					<span class="chatbox-message-item-text">
+					${a["msg1"]}
+					</span>
+					<span class="chatbox-message-item-time">${addZero(today.getHours())}:${addZero(today.getMinutes())}</span>
+				</div>
+				`
+				chatboxMessageWrapper.insertAdjacentHTML('beforeend', message)
+				scrollBottom()
+
+				message = `
+				<div class="chatbox-message-item received">
+					<img src="${a["img_msg1"]}">
+					</img>
+					<span class="chatbox-message-item-time">${addZero(today.getHours())}:${addZero(today.getMinutes())}</span>
+				</div>
+				`
+				chatboxMessageWrapper.insertAdjacentHTML('beforeend', message)
+				scrollBottom()
+
+				message = `
+				<div class="chatbox-message-item received">
+					<span class="chatbox-message-item-text">
+					${a["msg2"]}
+					</span>
+					<span class="chatbox-message-item-time">${addZero(today.getHours())}:${addZero(today.getMinutes())}</span>
+				</div>
+				`
+				chatboxMessageWrapper.insertAdjacentHTML('beforeend', message)
+				scrollBottom()
+
+				message = `
+				<div class="chatbox-message-item received">
+					<img src="${a["img_msg2"]}">
+					</img>
+					<span class="chatbox-message-item-time">${addZero(today.getHours())}:${addZero(today.getMinutes())}</span>
+				</div>
+				`
+				chatboxMessageWrapper.insertAdjacentHTML('beforeend', message)
+				scrollBottom()
+			}
 		});
 	};
 

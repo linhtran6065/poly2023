@@ -7,24 +7,26 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
 from django.shortcuts import redirect
-
+import openai
 import json
 import requests
 from django.middleware.csrf import get_token
 
 from .models import *
-
+messages = []
+system_msg = "You are a psychologist. Your task is to chat with users. Maximum 5 answers. If the conversation get too long, tell them you can help they reach to master users or professionals"
+messages.append({"role": "system", "content": system_msg})
+openai.api_key = "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"
 
 def index(request):
-    #all_posts = Post.objects.all().order_by('-date_created')
-    #all post from that user
     all_posts = Post.objects.none()
     communitys = Community.objects.none()
 
     followings = []
     suggestions = []
+
     if request.user.is_authenticated:
-        all_post = Post.objects.filter(creater=request.user)
+        all_posts = all_posts.union(Post.objects.filter(creater=request.user))
         followings = Follower.objects.filter(
             followers=request.user).values_list('user', flat=True)
         suggestions = User.objects.exclude(pk__in=followings).exclude(
@@ -32,21 +34,72 @@ def index(request):
         communitys = Community.objects.filter(userlist=request.user)
         #post from community user inside only
         for community in communitys:
-            print(Post.objects.filter(community=community.community_id))
             all_posts = all_posts.union(Post.objects.filter(community=community.community_id))
+    
     all_posts = all_posts.order_by('-date_created')
+    all_post = all_posts.reverse()
     paginator = Paginator(all_posts, 10)
     page_number = request.GET.get('page')
     if page_number == None:
         page_number = 1
     posts = paginator.get_page(page_number)
+
+    callRedFlag = 0
+    if request.user.is_authenticated:
+        if (request.user.redflag >= 5 and request.user.redflag % 5 == 0):
+            callRedFlag = 1
+        elif (request.user.redflag <= -5 and request.user.redflag % 5 == 0):
+            callRedFlag = -1
+    print(f"--------------------------Redflag: {callRedFlag}----------------------------")
+    #Return the call red flag with index.html, callredflag = -1 if negative and 1 if positive or else is neutral
+    #Use if block in the index to call the script
     return render(request, "network/index.html", {
         "posts": posts,
         "suggestions": suggestions,
         "communitys": communitys,
         "page": "all_posts",
-        'profile': False
+        'profile': False,
+        'redflag': callRedFlag
     })
+
+
+@csrf_exempt
+def chatapi(request, msg):
+    response = JsonResponse("Not authenticated", safe=False)
+    print(f"--------------------------Message: {request.user.is_authenticated} ----------------------------")
+    if request.user.is_authenticated:
+        user = User.objects.get(username=request.user.username)
+        if (user.messageAmountwithBot >= 5):
+            #If the user chat with the bot more than 5 times, the bot will stop chatting with the user
+            reply = "Deeply apologize but I can't understand much human emotions. You can try connect to other users who spread positive energy or professionals like our psychologists"
+            msg1 = "This is an active user in our community. You can try to connect with them"
+            img_msg1 = "https://scontent.fhan14-4.fna.fbcdn.net/v/t1.15752-9/355106013_533212115538234_3178483906043113328_n.png?_nc_cat=109&ccb=1-7&_nc_sid=ae9488&_nc_ohc=tlLHsBlH7S0AX-Wa5UP&_nc_ht=scontent.fhan14-4.fna&oh=03_AdSB3AuFhlj4bCGvoZu-2_2xN70eK6kPUuRz_wznh17JHA&oe=64B54ABE"
+            
+            msg2 = "This is one of our professional psychologists. You can try to connect with them"
+            img_msg2 = "https://c8.alamy.com/comp/2BNJ26T/medical-nurses-and-doctors-avatars-in-cartoon-style-2BNJ26T.jpg"
+            
+            response = JsonResponse({"reply": reply, "msg1": msg1, "img_msg1": img_msg1, "msg2": msg2, "img_msg2": img_msg2}, safe=False)
+
+        else:
+            user.messageAmountwithBot += 1
+            user.save()
+            message = msg
+            messages.append({"role": "user", "content": message})  # input cua user
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=messages)
+            reply = response["choices"][0]["message"]["content"]  # reply of chatgpt
+            messages.append({"role": "assistant", "content": reply})
+            msg1 = ""
+            img_msg1 = ""
+            msg2 = ""
+            img_msg2 = ""
+            response = JsonResponse({"reply": reply, "msg1": msg1, "img_msg1": img_msg1, "msg2": msg2, "img_msg2": img_msg2}, safe=False)
+    response['Access-Control-Allow-Origin'] = '*'
+    response['Access-Control-Allow-Headers'] = 'Content-Type'
+    response['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+    response['Access-Control-Allow-Credentials'] = 'true'
+    return response
 
 
 def login_view(request):
@@ -288,53 +341,29 @@ def create_post(request):
         # Get user_name
         user = request.user
         user_name = user.username
+        userObject = User.objects.get(username=user_name)
 
         # Call sentiment analysis API
         response = requests.post('http://127.0.0.1:8000/AI_models/sentiment_analysis/', data={'content_text': text})
-        if response.status_code == 200:
+        if response.status_code == 200: #Success get to the API from the Sentiment Analysis Model
             result = response.json().get('result')
-            print(result)
-            try:
-                if (communityid != -1):
-                    print("aaaaaaaaaaaaaaaaaa")
-                    user_post = Post.objects.filter(creater__username=user_name)
-                    # print(user_post)
-                    # print(len(user_post))
-                    if len(user_post) != 0:
-                        latest_user_post = user_post[len(user_post)-1]
-                        negative, positive = latest_user_post.evaluation_negative, latest_user_post.evaluation_positive
-                        
-                        if result[0] > 0.90:
-                            print("xxxxxxxxxxx")
-                            negative += 1
-                        if result[2] > 0.90:
-                            print("xxxxxxxxxxx")
-                            positive += 1
+            changeValue = 0
+            if (result[0] > 0.9): changeValue -= 1
+            if (result[2] > 0.9): changeValue += 1
 
-                        post = Post.objects.create(creater=request.user,
-                                    content_text=text,
-                                    content_image=pic,
-                                    community=Community.objects.get(community_id=communityid),
-                                    evaluation_positive=positive,
-                                    evaluation_negative=negative
-                                )
-                    else: 
-                        negative, positive = 0, 0
+            post = Post(creater=request.user,content_text=text,content_image=pic)
 
-                        post = Post.objects.create(
-                                    creater=request.user,
-                                    content_text=text,
-                                    content_image=pic,
-                                    evaluation_positive=positive,
-                                    evaluation_negative=negative
-                                )
 
-                else:
-                    post = Post.objects.create(creater=request.user, content_text=text, content_image=pic)                
-                return HttpResponseRedirect(reverse('index'))
+            #If the post is created in a community, update post as community
+            if (communityid != -1):
+                post.community_id = communityid
+            
+            post.save()
 
-            except Exception as e:
-                return HttpResponse(e)
+            userObject.redflag += changeValue
+            userObject.save() 
+
+            return HttpResponseRedirect(reverse('index'))
         else: 
             return HttpResponse('Failed to get a valid response from the AI model.')
     else:

@@ -428,6 +428,17 @@
     </div>
 
     <script src="{% static 'network/chatfunction.js' %}"></script>
+    {% if redflag == 1 %}
+
+    <script>nhanPositive();</script>
+
+
+    {% endif %}
+    {% if redflag == -1 %}
+
+    <script>nhanNegative();</script>
+
+    {% endif %}
 
 </body>
 
