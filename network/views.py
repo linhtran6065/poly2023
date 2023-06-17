@@ -16,11 +16,13 @@ from .models import *
 def index(request):
     #all_posts = Post.objects.all().order_by('-date_created')
     #all post from that user
-    all_posts = Post.objects.filter(creater=request.user)
+    all_posts = Post.objects.none()
+    communitys = Community.objects.none()
 
     followings = []
     suggestions = []
     if request.user.is_authenticated:
+        all_post = Post.objects.filter(creater=request.user)
         followings = Follower.objects.filter(
             followers=request.user).values_list('user', flat=True)
         suggestions = User.objects.exclude(pk__in=followings).exclude(
