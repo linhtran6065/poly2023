@@ -1,7 +1,7 @@
 <div align="left">
     <h1>Echoes app</h1>
     <img src="network/media/echoes.png" width=700" height="500" />
-    <img src="network/media/usecase.png" width=700" height="400" />
+    <img src="network/media/usecase.png" width=800" height="400" />
 
 </div>
 
