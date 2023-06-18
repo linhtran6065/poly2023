@@ -68,7 +68,7 @@ Now run the app
 # run django app
 python manage.py runserver
 ```   
-### Problem with chatGPT's API
+### If you have problem with chatGPT's API
 ```bash
 # go to network/view.py
 openai.api_key = "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" # -> change API key to yours (line 19)
