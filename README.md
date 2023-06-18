@@ -6,7 +6,7 @@
 ## Table Of Contents
 -  [Description](#description)
 -  [Features](#features)
--  [Project details](#for-more-details-of-projects-and-installation-guides)
+-  [Project details](#project-details)
 -  [Requirements](#requirements)
 -  [Installation](#installation)
 -  [Citation](#citation)
@@ -21,10 +21,10 @@ Echoes is a new social networking site that addresses mental health issues. By u
 - Reducing toxic material and cyberbullying by checking posts and comments.
 - Connecting with Mental Health Professionals if needed.
 
-## Details of projects, installation guides and demo video
-- Reading my blog at ...
-- Installation guide video at ...
-- Demo video at ...
+## Project details
+- For code and AI models explanation, read my blog at ...
+- For installation guide, go to this link ...
+- For demo video, go to this link ...
 ## Requirements
 - Django, transformers, torch, numpy, scipy, Pillow
 
