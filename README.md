@@ -27,9 +27,12 @@ Echoes is a new social networking site that addresses mental health issues. By u
 
 ![alt text](network/media/use_case.png)
 ## Project details
-- For code and AI models explanation, read my blog at ...
-- For installation guide, go to this link ...
+- For installation guide, go to this link: https://drive.google.com/file/d/19-3SvGiuWBV1FDuZhGXi4N_4bxc1AMAc/view?usp=sharing
 - For demo video, go to this link: https://drive.google.com/file/d/1y4rOoA9je63n6BqlAEhnpeBtxOSyuacq/view?usp=sharing
+- For AI pretrain models:
+  - Personality detection:[ model 1](https://huggingface.co/spaces/thoucentric/Big-Five-Personality-Traits-Detection)
+  - Sentiment Analysis: [ model 2](https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment)
+  - Mental Health Classification: [ model 3](https://huggingface.co/edmundhui/mental_health_trainer)
 ## Requirements
 - Django, transformers, torch, numpy, scipy, Pillow
 
@@ -67,9 +70,7 @@ python manage.py runserver
 
 ### Citation   
 ```
-@{article{Anh Pham, Linh Tran},
-  title={Echoes app},
-  author={Anh Pham, Linh Tran},
+@{title={Echoes app},
   year={2023}
 }
 ```   
