@@ -1,9 +1,9 @@
 <div align="left">
     <h1>Echoes app</h1>
-    <center>
-      <img src="network/media/echoes.png" width=550" height="550" />
-      <img src="network/media/use_case.png" width=800" height="400" />
-    </center>
+    <!-- <center> -->
+    <img src="network/media/echoes.png" width=550" height="550" />
+    <img src="network/media/use_case.png" width=800" height="400" />
+    <!-- </center> -->
     <!-- <img src="network/media/use_case.png" width=800" height="400" /> -->
 
 </div>
