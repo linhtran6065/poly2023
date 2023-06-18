@@ -1,6 +1,8 @@
 <div align="left">
     <h1>Echoes app</h1>
-    <!-- <img src="https://github.com/quocanh34/captionize-it-app/blob/master/github_video.gif" width=600" height="400" /> -->
+    <img src="network/media/echoes.png" width=700" height="500" />
+    <img src="network/media/usecase.png" width=700" height="400" />
+
 </div>
 
 ## Table Of Contents
