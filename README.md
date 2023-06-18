@@ -2,7 +2,8 @@
     <h1>Echoes app</h1>
 </div>
 
-![alt text](network/media/echoes.png)
+<!-- ![alt text](network/media/echoes.png) -->
+<img src="network/media/echoes.png" alt="isolated" width="800"/>
 
 ## Table Of Contents
 -  [Description](#description)
