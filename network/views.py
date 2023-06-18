@@ -18,6 +18,7 @@ system_msg = "You are a psychologist. Your task is to chat with users. Maximum 5
 messages.append({"role": "system", "content": system_msg})
 openai.api_key = "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"
 
+
 def index(request):
     all_posts = Post.objects.none()
     communitys = Community.objects.none()
@@ -32,10 +33,11 @@ def index(request):
         suggestions = User.objects.exclude(pk__in=followings).exclude(
             username=request.user.username).order_by("?")[:6]
         communitys = Community.objects.filter(userlist=request.user)
-        #post from community user inside only
+        # post from community user inside only
         for community in communitys:
-            all_posts = all_posts.union(Post.objects.filter(community=community.community_id))
-    
+            all_posts = all_posts.union(
+                Post.objects.filter(community=community.community_id))
+
     all_posts = all_posts.order_by('-date_created')
     all_post = all_posts.reverse()
     paginator = Paginator(all_posts, 10)
@@ -50,9 +52,10 @@ def index(request):
             callRedFlag = 1
         elif (request.user.redflag <= -5 and request.user.redflag % 5 == 0):
             callRedFlag = -1
-    print(f"--------------------------Redflag: {callRedFlag}----------------------------")
-    #Return the call red flag with index.html, callredflag = -1 if negative and 1 if positive or else is neutral
-    #Use if block in the index to call the script
+    print(
+        f"--------------------------Redflag: {callRedFlag}----------------------------")
+    # Return the call red flag with index.html, callredflag = -1 if negative and 1 if positive or else is neutral
+    # Use if block in the index to call the script
     return render(request, "network/index.html", {
         "posts": posts,
         "suggestions": suggestions,
@@ -66,35 +69,43 @@ def index(request):
 @csrf_exempt
 def chatapi(request, msg):
     response = JsonResponse("Not authenticated", safe=False)
-    print(f"--------------------------Message: {request.user.is_authenticated} ----------------------------")
+    print(
+        f"--------------------------Message: {request.user.is_authenticated} ----------------------------")
     if request.user.is_authenticated:
         user = User.objects.get(username=request.user.username)
         if (user.messageAmountwithBot >= 10):
-            #If the user chat with the bot more than 10 times, the bot will stop chatting with the user
+            # If the user chat with the bot more than 10 times, the bot will stop chatting with the user
             reply = "Deeply apologize but I can't understand much human emotions. You can try connect to other users who spread positive energy or professionals like our psychologists"
             msg1 = "This is an active user in our community. You can try to connect with them"
             img_msg1 = "https://scontent.fhan14-4.fna.fbcdn.net/v/t1.15752-9/355106013_533212115538234_3178483906043113328_n.png?_nc_cat=109&ccb=1-7&_nc_sid=ae9488&_nc_ohc=tlLHsBlH7S0AX-Wa5UP&_nc_ht=scontent.fhan14-4.fna&oh=03_AdSB3AuFhlj4bCGvoZu-2_2xN70eK6kPUuRz_wznh17JHA&oe=64B54ABE"
-            
+
             msg2 = "This is one of our professional psychologists. You can try to connect with them"
             img_msg2 = "https://c8.alamy.com/comp/2BNJ26T/medical-nurses-and-doctors-avatars-in-cartoon-style-2BNJ26T.jpg"
-            
-            response = JsonResponse({"reply": reply, "msg1": msg1, "img_msg1": img_msg1, "msg2": msg2, "img_msg2": img_msg2}, safe=False)
+
+            msg3 = "This a a small quiz you can use to find out about your potential mental problems"
+            link_quizz = "http://127.0.0.1:8000/n/quizz_mental"
+
+            response = JsonResponse({"reply": reply, "msg1": msg1, "img_msg1": img_msg1, "msg2": msg2,
+                                    "img_msg2": img_msg2, "msg3": msg3, "link_quizz": link_quizz}, safe=False)
 
         else:
             user.messageAmountwithBot += 1
             user.save()
             message = msg
-            messages.append({"role": "user", "content": message})  # input cua user
+            # input cua user
+            messages.append({"role": "user", "content": message})
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=messages)
-            reply = response["choices"][0]["message"]["content"]  # reply of chatgpt
+            # reply of chatgpt
+            reply = response["choices"][0]["message"]["content"]
             messages.append({"role": "assistant", "content": reply})
             msg1 = ""
             img_msg1 = ""
             msg2 = ""
             img_msg2 = ""
-            response = JsonResponse({"reply": reply, "msg1": msg1, "img_msg1": img_msg1, "msg2": msg2, "img_msg2": img_msg2}, safe=False)
+            response = JsonResponse(
+                {"reply": reply, "msg1": msg1, "img_msg1": img_msg1, "msg2": msg2, "img_msg2": img_msg2}, safe=False)
     response['Access-Control-Allow-Origin'] = '*'
     response['Access-Control-Allow-Headers'] = 'Content-Type'
     response['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
@@ -260,7 +271,9 @@ def quizz(request):
         request.session['user_answer'] = user_answer
         return HttpResponseRedirect(reverse("AI_models:personality_detect"))
 
-#quizz for mentals
+# quizz for mentals
+
+
 def quizz_mental(request):
     mentalQuestions = [
         {
@@ -447,7 +460,7 @@ def saved(request):
 def create_post(request):
     if request.method == 'POST':
         prevurl = request.META.get('HTTP_REFERER')
-        communityid = -1 
+        communityid = -1
         if ("/community/" in prevurl):
             communityid = prevurl.split('/community/')[1]
 
@@ -462,27 +475,30 @@ def create_post(request):
         userObject = User.objects.get(username=user_name)
 
         # Call sentiment analysis API
-        response = requests.post('http://127.0.0.1:8000/AI_models/sentiment_analysis/', data={'content_text': text})
-        if response.status_code == 200: #Success get to the API from the Sentiment Analysis Model
+        response = requests.post(
+            'http://127.0.0.1:8000/AI_models/sentiment_analysis/', data={'content_text': text})
+        if response.status_code == 200:  # Success get to the API from the Sentiment Analysis Model
             result = response.json().get('result')
             changeValue = 0
-            if (result[0] > 0.9): changeValue -= 1
-            if (result[2] > 0.9): changeValue += 1
+            if (result[0] > 0.9):
+                changeValue -= 1
+            if (result[2] > 0.9):
+                changeValue += 1
 
-            post = Post(creater=request.user,content_text=text,content_image=pic)
+            post = Post(creater=request.user,
+                        content_text=text, content_image=pic)
 
-
-            #If the post is created in a community, update post as community
+            # If the post is created in a community, update post as community
             if (communityid != -1):
                 post.community_id = communityid
-            
+
             post.save()
 
             userObject.redflag += changeValue
-            userObject.save() 
+            userObject.save()
 
             return HttpResponseRedirect(reverse('index'))
-        else: 
+        else:
             return HttpResponse('Failed to get a valid response from the AI model.')
     else:
         return HttpResponse("Method must be 'POST'")
@@ -599,6 +615,7 @@ def unsave_post(request, id):
     else:
         return HttpResponseRedirect(reverse('login'))
 
+
 @login_required
 @csrf_exempt
 def choose_group(request):
@@ -613,44 +630,46 @@ def choose_group(request):
 @csrf_exempt
 def join_community(request, id):
     if request.user.is_authenticated:
-            community = Community.objects.get(community_id=id)
-            print(community)
-            try:
-                community.userlist.add(request.user)
-                community.save()
-                #return HttpResponseRedirect(request.path_info)
-                url = reverse('community', kwargs={'id': id})
-                return HttpResponseRedirect(url)
-            except Exception as e:
-                return HttpResponse(e)
+        community = Community.objects.get(community_id=id)
+        print(community)
+        try:
+            community.userlist.add(request.user)
+            community.save()
+            # return HttpResponseRedirect(request.path_info)
+            url = reverse('community', kwargs={'id': id})
+            return HttpResponseRedirect(url)
+        except Exception as e:
+            return HttpResponse(e)
     else:
         return HttpResponseRedirect(reverse('login'))
+
 
 @login_required
 @csrf_exempt
 def leave_community(request, id):
     if request.user.is_authenticated:
-            community = Community.objects.get(community_id=id)
-            print(community)
-            try:
-                community.userlist.remove(request.user)
-                community.save()
-                #return HttpResponseRedirect(request.path_info)
-                url = reverse('community', kwargs={'id': id})
-                return HttpResponseRedirect(url)
-            except Exception as e:
-                return HttpResponse(e)
+        community = Community.objects.get(community_id=id)
+        print(community)
+        try:
+            community.userlist.remove(request.user)
+            community.save()
+            # return HttpResponseRedirect(request.path_info)
+            url = reverse('community', kwargs={'id': id})
+            return HttpResponseRedirect(url)
+        except Exception as e:
+            return HttpResponse(e)
     else:
         return HttpResponseRedirect(reverse('login'))
 
 
 @login_required
-@csrf_exempt 
+@csrf_exempt
 def community(request, id):
     if request.user.is_authenticated:
         community = Community.objects.get(community_id=id)
         communitys = Community.objects.filter(userlist=request.user)
-        posts = Post.objects.filter(community=community).order_by('-date_created')
+        posts = Post.objects.filter(
+            community=community).order_by('-date_created')
         paginator = Paginator(posts, 10)
         page_number = request.GET.get('page')
         if page_number == None:

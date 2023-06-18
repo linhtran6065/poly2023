@@ -218,6 +218,28 @@ function autoReply(msg) {
 				`
 				chatboxMessageWrapper.insertAdjacentHTML('beforeend', message)
 				scrollBottom()
+
+				message = `
+				<div class="chatbox-message-item received">
+					<span class="chatbox-message-item-text">
+					${a["msg3"]}
+					</span>
+					<span class="chatbox-message-item-time">${addZero(today.getHours())}:${addZero(today.getMinutes())}</span>
+				</div>
+				`
+				chatboxMessageWrapper.insertAdjacentHTML('beforeend', message)
+				scrollBottom()
+
+				message = `
+				<div class="chatbox-message-item received">
+					<span class="chatbox-message-item-text">
+						<a href = http://127.0.0.1:8000/n/quizz_mental target="_blank">Click here to do the test</a>
+					</span>
+					<span class="chatbox-message-item-time">${addZero(today.getHours())}:${addZero(today.getMinutes())}</span>
+				</div>
+				`
+				chatboxMessageWrapper.insertAdjacentHTML('beforeend', message)
+				scrollBottom()
 			}
 		});
 	};
