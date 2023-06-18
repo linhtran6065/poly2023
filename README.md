@@ -1,12 +1,8 @@
 <div align="left">
     <h1>Echoes app</h1>
-    <!-- <center> -->
-    <img src="network/media/echoes.png" width=550" height="550" />
-    <img src="network/media/use_case.png" width=800" height="400" />
-    <!-- </center> -->
-    <!-- <img src="network/media/use_case.png" width=800" height="400" /> -->
-
 </div>
+
+![alt text](network/media/echoes.png)
 
 ## Table Of Contents
 -  [Description](#description)
@@ -26,6 +22,9 @@ Echoes is a new social networking site that addresses mental health issues. By u
 - Reducing toxic material and cyberbullying by checking posts and comments.
 - Connecting with Mental Health Professionals if needed.
 
+## Usecase diagram
+
+![alt text](network/media/use_case.png)
 ## Project details
 - For code and AI models explanation, read my blog at ...
 - For installation guide, go to this link ...
