@@ -73,7 +73,7 @@ def chatapi(request, msg):
         f"--------------------------Message: {request.user.is_authenticated} ----------------------------")
     if request.user.is_authenticated:
         user = User.objects.get(username=request.user.username)
-        if (user.messageAmountwithBot >= 10):
+        if (user.messageAmountwithBot >= 5):
             # If the user chat with the bot more than 10 times, the bot will stop chatting with the user
             reply = "Deeply apologize but I can't understand much human emotions. You can try connect to other users who spread positive energy or professionals like our psychologists"
             msg1 = "This is an active user in our community. You can try to connect with them"

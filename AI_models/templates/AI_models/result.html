@@ -14,10 +14,14 @@ Result | Network
         
     </div>
 
-    <div class="prediction-container" style="margin-top: -2vh; margin-bottom: -3vh;">
+    <div class="prediction1" style="margin-top: -2vh; margin-left: 29vh">
         <h4><strong><em>(Mark the check if you think it's true)</em></strong></h4>
+    </div>
+
+    <div class="prediction-container" style="margin-top: 4vh; margin-bottom: -3vh;margin-left: 31vh">
+        
         {% for result in prediction %}
-        <div class="prediction-item" style="margin-bottom: 0.5vh;">
+        <div class="prediction-item" style="margin-bottom: 1vh;">
             <label>
                 <input type="checkbox" name="selected_prediction" value="{{ result }}" />
                 {{ result }}
@@ -30,27 +34,24 @@ Result | Network
         .prediction-container {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            text-align: center;
-            margin-top: 3em;
         }
-    
+
         .prediction-item {
-            margin-bottom: 1em;
-            font-size: 1.5em;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            align-items: center; 
         }
+
         .prediction-heading {
             margin-bottom: 5em;
             font-size: 1.5em;
         }
+
         .prediction-item input[type="checkbox"] {
             transform: scale(2);
             margin-right: 0.5em;
             --checkbox-color: #fe7941;
         }
+
         .prediction-item input[type="checkbox"]::before {
             background-color: var(--checkbox-color);
         }
