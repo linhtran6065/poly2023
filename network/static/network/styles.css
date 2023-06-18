@@ -53,7 +53,7 @@
 
 /* Set a style for the submit/send button */
 .form-container .btn {
-    background-color: #04AA6D;
+    background-color: #fe7941;
     color: white;
     padding: 16px 20px;
     border: none;
@@ -103,13 +103,13 @@
 }
 
 .icon-btn:hover {
-    background-color: rgba(40, 167, 69, .1);
+    background-color: #fe7941;
     transition-duration: .35s;
     cursor: pointer;
 }
 
 .icon-btn:active {
-    background-color: rgba(40, 167, 69, .23);
+    background-color: #fe7941;
     transition-duration: .35s;
 }
 

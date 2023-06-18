@@ -12,6 +12,7 @@ urlpatterns = [
     path("n/logout", views.logout_view, name="logout"),
     path("n/register", views.register, name="register"),
     path("n/quizz", views.quizz, name="quizz"),
+    path("n/quizz_mental", views.quizz_mental, name="quizz_mental"),
     path("<str:username>", views.profile, name='profile'),
     
     path("n/following", views.following, name='following'),
