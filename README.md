@@ -8,6 +8,7 @@
 ## Table Of Contents
 -  [Description](#description)
 -  [Features](#features)
+-  [Usecase diagram](#usecase-diagram)
 -  [Project details](#project-details)
 -  [Requirements](#requirements)
 -  [Installation](#installation)
@@ -24,8 +25,8 @@ Echoes is a new social networking site that addresses mental health issues. By u
 - Connecting with Mental Health Professionals if needed.
 
 ## Usecase diagram
-
 ![alt text](network/media/use_case.png)
+
 ## Project details
 - For installation guide, go to this link: https://drive.google.com/file/d/19-3SvGiuWBV1FDuZhGXi4N_4bxc1AMAc/view?usp=sharing
 - For demo video, go to this link: https://drive.google.com/file/d/1y4rOoA9je63n6BqlAEhnpeBtxOSyuacq/view?usp=sharing
