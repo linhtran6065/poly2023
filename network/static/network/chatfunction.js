@@ -91,7 +91,7 @@ function nhanNegative() {
 	let message = `
 	<div class="chatbox-message-item received">
 		<span class="chatbox-message-item-text">
-			Do you need any help from us?
+			Hello there, how was everything going? Do you need a person to talk with?
 		</span>
 		<span class="chatbox-message-item-time">${addZero(today.getHours())}:${addZero(today.getMinutes())}</span>
 	</div>
